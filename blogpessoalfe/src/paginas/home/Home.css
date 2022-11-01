@@ -1,11 +1,18 @@
-.titulo {
-    color: blueviolet;
-    text-align: center;
+.container {
+    background-color: rgb(107, 102, 110);
 }
 
-.img {
-    width: 500px;
-    height: 500px;
-    display: block;
-    margin: 0 auto;
+.titulo {
+    font-weight: bold !important;
 }
+
+.botaoPost {
+    border-color: black !important;
+    background-color: rgb(107, 102, 110);
+    color: black !important
+}
+
+.postagens{
+    background-color: white;
+}
+

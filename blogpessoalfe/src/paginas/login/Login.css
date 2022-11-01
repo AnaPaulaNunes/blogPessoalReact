@@ -1,0 +1,14 @@
+.fundo {
+    background-image: url(https://i.imgur.com/clmWI55.png);
+    background-repeat: no-repeat;
+    min-height: 80vh;
+    background-size: cover;
+}
+
+.texto {
+    font-weight: bold !important;
+}
+
+.text-decorator-none {
+    text-decoration: none;
+}
