@@ -1,0 +1,26 @@
+.container {
+    direction: row;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(141, 216, 141);
+}
+
+.escritos {
+    font-weight: bold !important;
+}
+
+.botao {
+    border-color: black !important;
+    color: black !important;
+    background-color: rgb(141, 216, 141);
+}
+
+.postagem {
+    background-color: aquamarine;
+}
+
+.img {
+    width: 95vh; 
+    height: 95vh;
+    align-items: center;
+}

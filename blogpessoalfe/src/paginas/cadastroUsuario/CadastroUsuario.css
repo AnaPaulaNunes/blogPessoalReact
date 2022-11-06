@@ -1,4 +1,4 @@
-.imagem {
+.imagemC {
     background-image: url(https://i.imgur.com/clmWI55.png);
     background-repeat: no-repeat;
     min-height: 80vh;
@@ -6,11 +6,12 @@
     background-position: center;
 }
 
-.texto {
+.textoC {
     font-weight: bold !important;
-    box-align: center;
+    text-align: center;
 }
 
-.text-decorator-none {
-    text-decoration: none;
+.btnCancelar {
+    margin-right: 20px !important;
+
 }
