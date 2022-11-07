@@ -8,7 +8,11 @@ import "./CadastroUsuario.css";
 function CadastroUsuario() {
 
     let history = useNavigate();
+
+    //state reservado apenas para pegar o campo de confirmação de senha, não vai para o backend
     const [confirmarSenha, setConfirmarSenha] = useState<String>("")
+
+    // esse state leva os dados para o backend
     const [usuario, setUsuario] = useState<Usuario>(
         {
             id: 0,
@@ -18,6 +22,7 @@ function CadastroUsuario() {
             foto:''
         })
 
+    // state que retornará os dados do backend (devido a senha que volta criptografada)
     const [usuarioResult, setUsuarioResult] = useState<Usuario>(
         {
             id: 0,
@@ -27,19 +32,14 @@ function CadastroUsuario() {
             foto: ''
         })
 
-    useEffect(() => {
-        if (usuarioResult.id !== 0) {
-            history("/login")
-        }
-    }, [usuarioResult]);
 
-
+// função para confirmar se a senha digitado no campo senha é igual ao digitado no confirmar senha
     function confirmarSenhaHandle(event: ChangeEvent<HTMLInputElement>){
         setConfirmarSenha(event.target.value)
     }
 
-
-    function updatedModel(event: ChangeEvent<HTMLInputElement>) {
+// função que irá atualizar o state com os dados digitados junto com o formulário
+    function updateModel(event: ChangeEvent<HTMLInputElement>) {
 
         setUsuario({
             ...usuario,
@@ -47,15 +47,35 @@ function CadastroUsuario() {
         })
 
     }
-    async function logar(event: ChangeEvent<HTMLFormElement>) {
-        event.preventDefault()
-        if(confirmarSenha == usuario.senha){
-        cadastroUsuario(`/usuarios/cadastrar`, usuario, setUsuarioResult)
-        alert('Usuário cadastrado com sucesso!')
+    async function cadastrar(event: ChangeEvent<HTMLFormElement>) {
+        event.preventDefault();
+        // verificação dos campos de senha
+        //= -> atribuição de valor (o valor que determinada variável irá receber)
+        //== -> checa se o conteúdo é igual
+        //=== -> checa o conteúdo e o tipo de conteúdo digitado (string, number, etc)
+
+        // o length significa o mínimo de caracteres que a senha deve conter
+        if(confirmarSenha === usuario.senha && usuario.senha.length >= 8){
+            try {
+                await cadastroUsuario(`/usuarios/cadastrar`, usuario, setUsuarioResult)
+                alert("Usuário cadastrado com sucesso!");
+            } catch (error) {
+                alert ("Falha interna ao cadastrar!");
+            }
         } else{
-            alert('Dados inconsistentes. Favor verificar as informações de cadastro!')
+            // msg de erro para o caso de não passar no if das senhas 
+            alert("As senhas não conferem. Favor verificar novamente!");
+            setUsuario({... usuario, senha: " "}); // zera o campo da senha, apaga o que foi digitado
+            setConfirmarSenha(" "); // zera o campo da senha, apaga o que foi digitado
         }
     }
+
+    //assim que receber o ID de retorno do cadastro do backend, redireciona para a tela de login
+    useEffect(() => {
+        if (usuarioResult.id !== 0) {
+            history("/login")
+        }
+    }, [usuarioResult]);
 
 
     return(
@@ -63,25 +83,31 @@ function CadastroUsuario() {
             <Grid item xs={6} className="imagemC"></Grid>
             <Grid item xs={6} alignItems="center">
                 <Box paddingX={10}>
-                <form onSubmit={logar}>
-                    <Typography variant="h5" gutterBottom color="textPrimary" component="h5" className="textoC">Cadastrar</Typography>
-                    <TextField onChange={(event: ChangeEvent<HTMLInputElement>) => updatedModel(event)}
+                <form onSubmit={cadastrar}>
+                    <Typography variant="h5" gutterBottom color="textPrimary" component="h5" className="textoC">Cadastre-se</Typography>
+                    <TextField onChange={(event: ChangeEvent<HTMLInputElement>) => updateModel(event)}
                     value={usuario.nome} 
                     label="Nome" name="nome" fullWidth margin="normal"></TextField>
 
-                    <TextField onChange={(event: ChangeEvent<HTMLInputElement>) => updatedModel(event)} 
+                    <TextField onChange={(event: ChangeEvent<HTMLInputElement>) => updateModel(event)} 
                     value={usuario.usuario}
-                    label="Usuário" name="usuario" fullWidth margin="normal"></TextField>
+                    label="Usuário (e-mail)" name="usuario" fullWidth margin="normal" required 
+                    placeholder="Digite um e-mail válido"></TextField>
 
-                    <TextField onChange={(event: ChangeEvent<HTMLInputElement>) => updatedModel(event)} 
+                    <TextField onChange={(event: ChangeEvent<HTMLInputElement>) => updateModel(event)}
+                    value={usuario.foto}
+                    label="URL da foto" name="foto" fullWidth margin="normal"></TextField>
+
+                    <TextField onChange={(event: ChangeEvent<HTMLInputElement>) => updateModel(event)} 
                     value={usuario.senha}
-                    label="Senha" name="senha" fullWidth type="password" margin="normal"></TextField>
+                    label="Senha" name="senha" fullWidth type="password" margin="normal"
+                    placeholder="Digite no mínimo 8 caracteres"></TextField>
 
                     <TextField onChange={(event: ChangeEvent<HTMLInputElement>) => confirmarSenhaHandle(event)} 
                     value={confirmarSenha}
                     label="Confirmar Senha" name="confirmarSenha" fullWidth type="password" margin="normal"></TextField>
 
-                    <Box marginTop={2} textAlign="center">
+                    <Box display="flex" justifyContent="center" marginTop={2} textAlign="center">
                         <Link to="/login" className="text-decorator-none">
                             <Button variant="contained" color="secondary" className="btnCancelar">
                                 Cancelar
