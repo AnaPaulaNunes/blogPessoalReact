@@ -1,3 +1,7 @@
+*{
+    font-family: 'Tahoma', Segoe UI , Geneva, Verdana, sans-serif !important;
+}
+
 .cursor{
     cursor: pointer;
     color: black;
@@ -5,4 +9,9 @@
 
 .text-decorator-none {
     text-decoration: none;
+}
+
+.navbar {
+    background-color: blueviolet !important;
+
 }

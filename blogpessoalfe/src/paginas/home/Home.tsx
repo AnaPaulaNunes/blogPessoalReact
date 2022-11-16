@@ -1,20 +1,36 @@
 import { Grid, Typography, Button } from '@material-ui/core';
 import { Box } from '@mui/material';
 import React, { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import useLocalStorage from 'react-use-localstorage';
+import { Link, useNavigate } from 'react-router-dom';
+//import useLocalStorage from 'react-use-localstorage';
 import TabPostagem from '../../components/postagens/tabpostagem/TabPostagem';
 import ModalPostagem from "../../components/postagens/modalPostagem/ModalPostagem";
 import './Home.css';
+import { useSelector } from 'react-redux';
+import { TokenState } from '../../store/tokens/tokensReducer';
+import { toast } from 'react-toastify';
 
 function Home() {
 
     let navigate = useNavigate();
-    const [token, setToken] = useLocalStorage("token");
+    //const [token, setToken] = useLocalStorage("token");
+    //constante que vai armazenar o meu token
+    const token = useSelector<TokenState, TokenState["tokens"]>(
+        (state) => state.tokens
+    )
 
     useEffect(() => {
         if (token == "") {
-            alert("Você precisa estar logado!")
+            toast.error("Você precisa estar logado!", {
+                position: "top-right",
+                autoClose: 2000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: false,
+                draggable: false,
+                theme: "colored",
+                progress: undefined,
+            });
             navigate("/login")
         }
     }, [token])
@@ -36,12 +52,14 @@ function Home() {
                         <Box marginRight={1}>
                             <ModalPostagem />
                         </Box>
-                        <Button variant="outlined" className ="botaoPost">Ver Postagens</Button>
+                        <Link to="postagens" className= "text-decorator-none">
+                            <Button variant="outlined" className ="botaoPost">Ver Postagens</Button>
+                        </Link>
                     </Box>
                 </Grid>
 
                 <Grid item xs={6} >
-                    <img src="https://i.imgur.com/RrQstcz.png" alt="" width="600px" height="550px" />
+                    <img src="https://i.imgur.com/gEEWAaf.png" alt="" width="650px" height="550px" />
                 </Grid>
                 <Grid xs={12} className="postagens">
                     <TabPostagem />

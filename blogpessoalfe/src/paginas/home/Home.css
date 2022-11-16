@@ -1,5 +1,5 @@
 .container {
-    background-color: rgb(107, 102, 110);
+    background-color: rgb(102, 110, 110);
 }
 
 .titulo {
@@ -16,3 +16,6 @@
     background-color: white;
 }
 
+.text-decorator-none {
+    text-decoration: none;
+}

@@ -4,34 +4,54 @@ import { Card, CardActions, CardContent, Button, Typography } from '@material-ui
 import './ListaTema.css';
 import { Box } from '@mui/material';
 import Tema from '../../../models/Tema';
-import useLocalStorage from 'react-use-localstorage';
+//import useLocalStorage from 'react-use-localstorage';
 import { busca } from '../../../services/Service';
+import { useSelector } from 'react-redux';
+import { TokenState } from '../../../store/tokens/tokensReducer';
+import { toast } from 'react-toastify';
 
 function ListaTema() {
 
+    //constante que vai armazenar os temas do backend 
     const [temas, setTemas] = useState<Tema[]>([]);
-    const [token, setToken] = useLocalStorage("token");
+    //const [token, setToken] = useLocalStorage("token");
     let navigate = useNavigate();
+    //constante que vai acessar o meu token
+    const token = useSelector<TokenState, TokenState["tokens"]>(
+        (state) => state.tokens
+    )
 
     useEffect(() => {
         if(token == ""){
-            alert("Você precisa estar logado!")
+            toast.error("Você precisa estar logado!", {
+                position: "top-right",
+                autoClose: 2000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: false,
+                draggable: false,
+                theme: "colored",
+                progress: undefined,
+            })
             navigate("/login");
         }
     }, [token])
 
+    //função que vai solicitar o tema do backend 
     async function buscaTema(){
         await busca("/temas", setTemas, {
             headers: { 'Authorization': token },
         })
     }
 
+    // vai rodar assim que a tela for aberta pelo usuario
     useEffect(() =>{
         buscaTema()
     }, [temas.length])
 
 return (
     <>
+    {/* o map irá percorrer o array de temas e gerar um card novo para cada tema existente*/}
     { temas.map(tema => (
     <Box m={2} >
         <Card variant="outlined">

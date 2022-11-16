@@ -4,6 +4,7 @@ import React, { ChangeEvent, useEffect, useState } from "react";
 import Usuario from "../../models/Usuario";
 import { cadastroUsuario } from "../../services/Service";
 import "./CadastroUsuario.css";
+import { toast } from "react-toastify";
 
 function CadastroUsuario() {
 
@@ -58,9 +59,27 @@ function CadastroUsuario() {
         if(confirmarSenha === usuario.senha && usuario.senha.length >= 8){
             try {
                 await cadastroUsuario(`/usuarios/cadastrar`, usuario, setUsuarioResult)
-                alert("Usuário cadastrado com sucesso!");
+                toast.success("Usuário cadastrado com sucesso!", {
+                    position: "top-right",
+                    autoClose: 2000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: false,
+                    draggable: false,
+                    theme: "colored",
+                    progress: undefined,
+                })
             } catch (error) {
-                alert ("Falha interna ao cadastrar!");
+                toast.error("Falha interna ao cadastrar. Dados inconsistentes!", {
+                    position: "top-right",
+                    autoClose: 2000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: false,
+                    draggable: false,
+                    theme: "colored",
+                    progress: undefined,
+                })
             }
         } else{
             // msg de erro para o caso de não passar no if das senhas 
